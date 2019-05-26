@@ -9,12 +9,14 @@
             <span class="lnr lnr-chevron-down"></span>
           </div>
           <ul class="dropdown">
-            <li rel="Lekki" @click="saveFrom('Lekki')">Island</li>
-            <li rel="Ikoyi" @click="saveFrom('Ikoyi')">Ikoyi</li>
+            <li rel="Island" @click="saveFrom('Island')">Island</li>
+            <li rel="Mainland" @click="saveFrom('Mainland')">Mainland</li>
+            <!-- <li rel="Lekki" @click="saveFrom('Lekki')">Island</li> -->
+            <!-- <li rel="Ikoyi" @click="saveFrom('Ikoyi')">Ikoyi</li>
             <li rel="Victoria Island" @click="saveFrom('VI')">Victoria Island</li>
             <li rel="Egbeda" @click="saveFrom('Egbeda')">Egbeda</li>
             <li rel="Yaba" @click="saveFrom('Yaba')">Yaba</li>
-            <li rel="Ikeja" @click="saveFrom('Ikeja')">Ikeja</li>
+            <li rel="Ikeja" @click="saveFrom('Ikeja')">Ikeja</li> -->
           </ul>
         </div>
         <div class="select">
@@ -23,12 +25,14 @@
             <span class="lnr lnr-chevron-down"></span>
           </div>
           <ul class="dropdown">
-            <li rel="Lekki" @click="saveTo('Lekki')">Lekki</li>
+            <li rel="Island" @click="saveTo('Island')">Island</li>
+            <li rel="Mainland" @click="saveTo('Mainland')">Mainland</li>
+            <!-- <li rel="Lekki" @click="saveTo('Lekki')">Lekki</li>
             <li rel="Ikoyi" @click="saveTo('Ikoyi')">Ikoyi</li>
             <li rel="Yaba" @click="saveTo('Yaba')">Yaba</li>
             <li rel="Egbeda" @click="saveTo('Egbeda')">Egbeda</li>
             <li rel="Ikeja" @click="saveTo('Ikeja')">Ikeja</li>
-            <li rel="Victoria Island" @click="saveTo('VI')">Victoria Island</li>
+            <li rel="Victoria Island" @click="saveTo('VI')">Victoria Island</li> -->
           </ul>
         </div>
       </div>
@@ -89,10 +93,10 @@ export default {
       this.data.to = params
     },
     saveTime(params) {
-      this.data.to = params
+      this.data.time = params
     },
     saveType(params) {
-      this.data.to = params
+      this.data.type = params
     }
   }
 };

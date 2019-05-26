@@ -12,9 +12,9 @@ $(function(){
     // });
 
     // Custome Button Jquery Step
-    $('.forward').click(function(){
-    	$("#wizard").steps('next');
-    })
+    // $('.forward').click(function(){
+    // 	$("#wizard").steps('next');
+    // })
 
     // Date Picker
     // var dp1 = $('#dp1').datepicker().data('datepicker');

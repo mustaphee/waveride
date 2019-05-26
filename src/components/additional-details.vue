@@ -1,68 +1,191 @@
 <template>
-<div>
+  <div>
     <h4>Additional details</h4>
-	                <section class="section-style">
-                		<div class="board-wrapper">
-                			<div class="board-inner">
-                				<div class="board-item">
-                					Ride Location :
-                					<span>Lekki to Ikeja</span>
-                				</div>
-                				<div class="board-item">
-                					Take off time :
-                					<span>7:00am to 8:00am</span>
-                				</div>
-                				<div class="board-item">
-                						Ride Type :
-                						<span>Salon Car</span>
-                					</div>
-                				<div class="board-item" id="bol">
-                						Estimated cost :
-                						<span>N1200</span>
-                					</div>
-                					
-                			</div>
-                		</div>
-                		<div class="form-wrapper">
-                			<div class="form-group">
-                				<label for="">Room 1 :</label>
-	                			<div class="form-row">
-									<div class="select mr-20">
-										<div class="form-holder">
-											<div class="select-control">1 Adult</div>
-											<span class="lnr lnr-chevron-down"></span>
-										</div>
-										<ul class="dropdown">
-											<li rel="1 Adult">1 Adult</li>
-											<li rel="2 Adults">2 Adults</li>
-											<li rel="3 Adults">3 Adults</li>
-										</ul>
-									</div>
+    <section class="section-style">
+      <div class="board-wrapper">
+        <div class="board-inner">
+          <div class="board-item">
+            Ride Location :
+            <span>{{data.source}} to {{data.destination}}</span>
+          </div>
+          <div class="board-item">
+            Take off time :
+            <span>{{firstPageData.time}}</span>
+          </div>
+          <div class="board-item">
+            Ride Type :
+            <span> {{firstPageData.type}} </span>
+          </div>
+          <div class="board-item" id="bol">
+            Estimated cost :
+            <span>N1200</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-wrapper">
+        <div class="form-group">
+          <label for>
+			  <span>Room 1 :</span>
+			  
+			</label>
+          <div class="form-row">
+            <div class="select mr-20"">
+              <div class="form-holder"  @click="showSourceList=true">
+                <div class="select-control"  v-if="data.source"> {{data.source}}</div>
+				<span class="select-control" v-else>From :</span>
+                <span class="lnr lnr-chevron-down"></span>
+              </div>
+              <ul class="dropdown" v-show="showSourceList" :class="{show: showSourceList}">
+				<li :key="index" v-for="(location, index) in sourceList" :rel="location.name" @click="selectSource(location.name)">{{location.name}}</li>
+                <!-- <li rel="Victoria Island">Victoria Island</li>
+                <li rel="Ajah">Ajah</li>
+                <li rel="Obalende">Obalende</li> -->
+              </ul>
+            </div>
 
-									<div class="select">
-										<div class="form-holder">
-											<div class="select-control">No Child</div>
-											<span class="lnr lnr-chevron-down"></span>
-										</div>
-										<ul class="dropdown">
-											<li rel="1 Room">No Child</li>
-											<li rel="1 Child">1 Child</li>
-											<li rel="2 Children">2 Children</li>
-											<li rel="3 Children">3 Children</li>
-										</ul>
-									</div>
-	                			</div>
-                			</div>
-	                		<button class="forward" @click="$emit('next')">Proceed to Pay
-								<i class="zmdi zmdi-long-arrow-right"></i>
-							</button>
-                		</div>
-	                </section>
-</div>
+            <div class="select">
+              <div class="form-holder" @click="showDestinationList=true">
+                <div class="select-control" v-if="data.destination">{{data.destination}}</div>
+				<div class="select-control" v-else>To :</div>
+                <span class="lnr lnr-chevron-down"></span>
+              </div>
+              <ul class="dropdown" v-show="showDestinationList"  :class="{show: showDestinationList}">
+				  <li :key="index" v-for="(location, index) in destinationList" :rel="location.name" @click="selectDestination(location.name)">{{location.name}}</li>
+                <!-- <li rel="1 Room">No Child</li>
+                <li rel="1 Child">1 Child</li>
+                <li rel="2 Children">2 Children</li>
+                <li rel="3 Children">3 Children</li> -->
+              </ul>
+            </div>
+          </div>
+        </div>
+        <button class="forward" @click="$emit('next')">
+          Proceed to Pay
+          <i class="zmdi zmdi-long-arrow-right"></i>
+        </button>
+      </div>
+    </section>
+  </div>
 </template>
 
 <script>
+let Islandlocation =  [
+	 {'name': 'Lekki', 
+	  'destinations': [
+		{'name': 'Ikeja',
+		 'price': 800
+		},
+		{'name': 'Egbeda',
+		 'price': 900},
+		 {'name': 'Yaba',
+		  'price': 1000}
+	  ]
+	 }, 
+	 {'name': 'Ikoyi', 
+	  'destinations': [
+		{'name': 'Ikeja',
+		 'price': 850
+		},
+		{'name': 'Egbeda',
+		 'price': 950},
+		 {'name': 'Yaba',
+		  'price': 1050}
+	  ]
+	 }, 
+	 {'name': 'VI', 
+	  'destinations': [
+		{'name': 'Ikeja',
+		 'price': 900
+		},
+		{'name': 'Egbeda',
+		 'price': 1000},
+		 {'name': 'Yaba',
+		  'price': 1100}
+	  ]
+	 }, 
+	 
+	 
+  ]	
+  let Mainlandlocation =  [
+	 {'name': 'Ikeja', 
+	  'destinations': [
+		{'name': 'VI',
+		 'price': 800
+		},
+		{'name': 'Lekki',
+		 'price': 900},
+		 {'name': 'Ikoyi',
+		  'price': 1000}
+	  ]
+	 }, 
+	 {'name': 'Egbeda', 
+	  'destinations': [
+		{'name': 'VI',
+		 'price': 850
+		},
+		{'name': 'Lekki',
+		 'price': 950},
+		 {'name': 'Ikoyi',
+		  'price': 1050}
+	  ]
+	 }, 
+	 {'name': 'Yaba', 
+	  'destinations': [
+		{'name': 'VI',
+		 'price': 900
+		},
+		{'name': 'Lekki',
+		 'price': 1000},
+		 {'name': 'Ikoyi',
+		  'price': 1100}
+	  ]
+	 }	 
+  ]
 export default {
-    
-}
+  props: ["firstPageData"], 
+  data () {
+	  return {
+		  sourceList: [],
+		  destinationList: [],
+		  data: {},
+		  showSourceList: false,
+		  showDestinationList: false
+	  }
+  },
+  methods: {
+	  selectSource(source) {
+		  console.log(source)
+		this.data.source = source
+		this.showSourceList = false
+		let selectedSource = {}
+			selectedSource = Islandlocation.find(member=>{return member.name == source})
+			if(!selectedSource)
+				selectedSource = Mainlandlocation.find(member=>{return member.name == source})
+		this.destinationList = selectedSource.destinations 
+	  },
+	  selectDestination(destination){
+		this.data.destination = destination
+		this.showDestinationList = false
+	  }
+  },
+  mounted() {
+		if(this.firstPageData.from == 'Island')
+			this.sourceList = Islandlocation
+		else
+		this.sourceList = Mainlandlocation
+  },
+  watch:{
+	  firstPageData(val){
+		  if(val.from == 'Island')
+			  this.sourceList = Islandlocation
+		  else
+		  	this.sourceList = Mainlandlocation
+	  }
+  }
+};
 </script>
+<style scoped>
+.show{
+	display: block !important
+}
+</style>

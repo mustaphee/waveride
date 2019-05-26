@@ -34,10 +34,10 @@
         </div>
         <!-- SECTION 1 -->
         <div class="content clearfix">
-          <my-details v-if="page==1" transition="expand" @next="page+=1"></my-details>
-          <additional-details v-if="page==2" transition="expand" @next="page+=1"/>
-          <booking v-if="page==3" transition="expand" @next="page+=1"/>
-          <confirmation v-if="page==4" transition="expand"/>
+          <my-details v-if="page==1" transition="expand" @next="onOpenDetails"></my-details>
+          <additional-details v-if="page==2" transition="expand" @next="page+=1" :firstPageData="firstPageData"/>
+          <booking v-show="page==3" transition="expand" @next="page+=1"/>
+          <confirmation v-show="page==4" transition="expand"/>
         </div>
         <!-- SECTION 2 -->
 
@@ -66,10 +66,15 @@ export default {
       phoneNumber: "",
       bvn: "fdg",
       date: new Date().toLocaleString(),
-      page: 1
+      page: 1,
+      firstPageData: {}
     };
   },
   methods: {
+    onOpenDetails(data){
+      this.firstPageData = data;
+      this.page = 2
+    },
     getBVNDetails: function(param) {
       fetch(
         "https://ravesandboxapi.flutterwave.com/v2/kyc/bvn/{param}?seckey=FLWSECK-5dac71a1067333bafcaabb070ad63d04-X"
