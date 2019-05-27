@@ -74,7 +74,7 @@ export default {
     getBVNDetails: function(param) {
 			this.showLoading = true
       axios.get(
-        "https://ravesandboxapi.flutterwave.com/v2/kyc/bvn/"+param+"?seckey=FLWSECK-5dac71a1067333bafcaabb070ad63d04-X"
+        "https://ravesandboxapi.flutterwave.com/v2/kyc/bvn/"+param+"?seckey=FLWSECK-ca1f67b1eed4b7ce5e65c444439e562d-X"
       )
         .then((res) => {
           this.data.firstName = res.data.data.first_name;

@@ -25,7 +25,7 @@
       <div class="form-wrapper">
         <div class="form-group">
           <label for>
-			  <span>Room 1 :</span>
+			  <span>From :</span>
 			  
 			</label>
           <div class="form-row">

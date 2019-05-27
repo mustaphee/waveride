@@ -67,7 +67,7 @@
     </div>
 </template>
 <script>
-const API_publicKey = 'FLWPUBK-6c52d340104b1fe095201a07f428f759-X';
+const API_publicKey = 'FLWPUBK-c55c9ebf551cd425db012c52b5913be1-X';
 export default {
 	props: ['thirdPageData'],
 	data() {
@@ -130,7 +130,7 @@ export default {
 	},
 	mounted() {
 		this.getType()
-		window.xax = this
+		window.xax = getpaidSetup()
 	}
 }
 </script>
