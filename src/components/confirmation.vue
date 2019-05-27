@@ -6,11 +6,15 @@
                 			<div class="board-inner">
                 				<div class="board-item">
                 					Date :
-                					<span> 25-12-2019</span>
+                					<span>{{dateAndTime}}</span>
                 				</div>
                 				<div class="board-item">
                 					Take-off Time :
-                					<span>7:00am to 8:00am</span>
+                					<span>{{thirdPageData.time}}</span>
+                				</div>
+                				<div class="board-item">
+                					Trip :
+                					<span>{{thirdPageData.source + ' to '+ thirdPageData.destination}}</span>
                 				</div>
                 			</div>
                 		</div>
@@ -19,53 +23,30 @@
 	                			<div class="bill-cell">
 	                				<div class="bill-item">
 		            					<div class="bill-unit">
-		            						Ride Type :  <span>Car</span>
+		            						Ride charges:  <span>{{thirdPageData.type}}</span>
 		            					</div>
-		            					<span class="price">N800</span>
+		            					<span class="price">N{{typeVAT}}</span>
 		            				</div>
-		            				<div class="bill-item people">
-		            					<div class="bill-unit">
-		            						Comfort : <span>Luxury</span>
-		            					</div>
-		            					<div class="bill-unit">
-		            						Children : <span>0</span>
-		            					</div>
-		            				</div>
-	                			</div>
-	            				<!-- <div class="bill-cell" style="margin-bottom: 13px">
 	                				<div class="bill-item">
 		            					<div class="bill-unit">
-		            						Room 2 :  <span>Luxury Room</span>
+		            						Base Fee:
 		            					</div>
-		            					<span class="price">$23</span>
+		            					<span class="price">N{{thirdPageData.price}}</span>
 		            				</div>
-		            				<div class="bill-item people">
-		            					<div class="bill-unit">
-		            						Adult : <span>4</span>
-		            					</div>
-		            					<div class="bill-unit">
-		            						Children : <span>1</span>
-		            					</div>
-		            				</div>
-		            				<div class="bill-item service">
-		            					<div class="bill-unit">
-		            						Rooms & Services :
-		            					</div>
-		            					<span class="price">$80</span>
-		            				</div>
-	                			</div> -->
+	                			</div>
+	            				
 	                			<div class="bill-cell">
 	                				<div class="bill-item vat">
 		            					<div class="bill-unit">
-		            						App commision 10% :
+		            						App commision 20% :
 		            					</div>
-		            					<span class="price">N800</span>
+		            					<span class="price">{{(thirdPageData.price + typeVAT)*0.2}}</span>
 		            				</div>
 		            				<div class="bill-item total-price">
 		            					<div class="bill-unit">
 		            						Total Price :
 		            					</div>
-		            					<span class="price">N1200</span>
+		            					<span class="price">{{thirdPageData.price+typeVAT+(thirdPageData.price + typeVAT)*0.2}}</span>
 		            				</div>
 		            				<div class="checkbox-circle">
 										<label>
@@ -75,17 +56,82 @@
 									</div>
 	                			</div>
 	            			</div>
-	            			<button @click="$emit('next')" style="width: 195px; margin-top: 45px;">Confirmation
+							<form>
+								<button @click="payWithRave" style="width: 195px; margin-top: 45px;">Pay Now
 								<i class="zmdi zmdi-long-arrow-right"></i>
 							</button>
+							</form>
+	            			
                 		</div>
 	                </section>
     </div>
 </template>
-
 <script>
+const API_publicKey = 'FLWPUBK-6c52d340104b1fe095201a07f428f759-X';
 export default {
-    
+	props: ['thirdPageData'],
+	data() {
+	  return {
+		typeVAT: '',
+		dateAndTime: (new Date()).toLocaleString()
+	  }
+	},
+	methods: {
+	  getType(){
+		  let carType = this.thirdPageData.type
+		  if (carType === 'Salon Car'){
+			  this.typeVAT = 200
+		  }
+		  else if (carType === 'Jeep'){
+			  this.typeVAT = 350
+		  }
+		  else if (carType === 'Minivan'){
+			  this.typeVAT = 250
+		  }
+		  else {
+			  this.typeVAT = 100
+		  }
+	  },
+	  payWithRave() {
+        let x = getpaidSetup({
+            PBFPubKey: API_publicKey,
+            customer_email: this.thirdPageData.email,
+            amount: this.thirdPageData.price+this.typeVAT+(this.thirdPageData.price + this.typeVAT)*0.2,
+            currency: "NGN",
+            txref: "rave-123456",
+            subaccounts: [
+              {
+                id: "RS_04129E2A7B928AE4A0CFB4E1AD3DCBD2"
+              }
+            ],
+            meta: [{
+                metaname: "flightID",
+                metavalue: "AP1234"
+            }],
+            onclose: function() {},
+            callback: function(response) {
+                var txref = response.tx.txRef; // collect flwRef returned and pass to a 					server page to complete status check.
+                console.log("This is the response returned after a charge", response);
+                if (
+                    response.tx.chargeResponseCode == "00" ||
+                    response.tx.chargeResponseCode == "0"
+                ) {
+					// redirect to a success page
+					console.log('Success')
+                } else {
+					// redirect to a failure page.
+					console.log('error here oo')
+                }
+
+                x.close(); // use this to close the modal immediately after payment.
+            }
+        });
+    }
+	},
+	mounted() {
+		this.getType()
+		window.xax = this
+	}
 }
 </script>
 

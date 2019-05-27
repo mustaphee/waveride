@@ -35,9 +35,9 @@
         <!-- SECTION 1 -->
         <div class="content clearfix">
           <my-details v-if="page==1" transition="expand" @next="onOpenDetails"></my-details>
-          <additional-details v-if="page==2" transition="expand" @next="page+=1" :firstPageData="firstPageData"/>
-          <booking v-show="page==3" transition="expand" @next="page+=1"/>
-          <confirmation v-show="page==4" transition="expand"/>
+          <additional-details v-if="page==2" transition="expand" @next="onOpenSecondDetails" :firstPageData="firstPageData"/>
+          <booking v-show="page==3" transition="expand" @next="onOpenThirdDetails" :secondPageData="secondPageData"/>
+          <confirmation v-show="page==4" transition="expand" :thirdPageData="thirdPageData"/>
         </div>
         <!-- SECTION 2 -->
 
@@ -67,7 +67,9 @@ export default {
       bvn: "fdg",
       date: new Date().toLocaleString(),
       page: 1,
-      firstPageData: {}
+      firstPageData: {},
+      secondPageData: {},
+      thirdPageData: {}
     };
   },
   methods: {
@@ -75,29 +77,15 @@ export default {
       this.firstPageData = data;
       this.page = 2
     },
-    getBVNDetails: function(param) {
-      fetch(
-        "https://ravesandboxapi.flutterwave.com/v2/kyc/bvn/{param}?seckey=FLWSECK-5dac71a1067333bafcaabb070ad63d04-X"
-      )
-        .then(res => {
-          this.firstName = res.data.first_name;
-          this.lastName = res.data.last_name;
-          this.phoneNumber = res.data.phone;
-        })
-        .catch(err => {
-          this.error = err;
-        });
-    }
-  },
-  watch: {
-    // bvn(val) {
-    // 	if(val.length > 10 ){
-    // 		this.getBVNDetails(val)
-    // 	}
-    // }
-  },
-  mounted() {
-    window.zzz = this;
+    onOpenSecondDetails(data){
+      this.secondPageData = data;
+      this.page = 3
+    },
+    onOpenThirdDetails(data){
+      this.thirdPageData = data;
+      this.page = 4
+    },
+   
   }
 };
 </script>

@@ -18,7 +18,7 @@
           </div>
           <div class="board-item" id="bol">
             Estimated cost :
-            <span>N1200</span>
+            <span>N{{data.price}}</span>
           </div>
         </div>
       </div>
@@ -50,17 +50,13 @@
                 <span class="lnr lnr-chevron-down"></span>
               </div>
               <ul class="dropdown" v-show="showDestinationList"  :class="{show: showDestinationList}">
-				  <li :key="index" v-for="(location, index) in destinationList" :rel="location.name" @click="selectDestination(location.name)">{{location.name}}</li>
-                <!-- <li rel="1 Room">No Child</li>
-                <li rel="1 Child">1 Child</li>
-                <li rel="2 Children">2 Children</li>
-                <li rel="3 Children">3 Children</li> -->
+				  <li :key="index" v-for="(location, index) in destinationList" :rel="location.name" @click="selectDestination(location)">{{location.name}}</li>
               </ul>
             </div>
           </div>
         </div>
-        <button class="forward" @click="$emit('next')">
-          Proceed to Pay
+        <button class="forward" @click="$emit('next', {...firstPageData, ...data})">
+          Continue
           <i class="zmdi zmdi-long-arrow-right"></i>
         </button>
       </div>
@@ -149,7 +145,8 @@ export default {
 		  destinationList: [],
 		  data: {},
 		  showSourceList: false,
-		  showDestinationList: false
+		  showDestinationList: false,
+		  price: ''
 	  }
   },
   methods: {
@@ -164,8 +161,9 @@ export default {
 		this.destinationList = selectedSource.destinations 
 	  },
 	  selectDestination(destination){
-		this.data.destination = destination
+		this.data.destination = destination.name
 		this.showDestinationList = false
+		this.data.price = destination.price
 	  }
   },
   mounted() {
