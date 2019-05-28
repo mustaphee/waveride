@@ -92,7 +92,8 @@ export default {
 			  this.typeVAT = 100
 		  }
 	  },
-	  payWithRave() {
+	  payWithRave(event) {
+			  event.preventDefault();
         let x = getpaidSetup({
             PBFPubKey: API_publicKey,
             customer_email: this.thirdPageData.email,
@@ -130,7 +131,6 @@ export default {
 	},
 	mounted() {
 		this.getType()
-		window.xax = getpaidSetup()
 	}
 }
 </script>
